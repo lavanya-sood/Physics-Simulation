@@ -1,0 +1,406 @@
+<html>
+    <head>
+        <title>Simulation</title>
+        <style>
+            body {
+                background-color: lightgrey;
+            }
+            #svg {
+                background-color: white;
+                display: inline-block;
+                
+            } 
+            #para {
+                background-image: url(Bouncingball.jpg);
+                width: calc(100% - 810px);  
+                height: 100%;
+                display: inline-block;
+                float: right;
+                text-align: center;
+                font-family: Arial;
+                padding-top: 10px;
+                padding-bottom: 30px;
+                overflow: scroll;
+                color: black;
+            } #instr {
+                display: none;  
+                padding-top: 25px;
+                padding-bottom: 25px;
+            } #button{
+                padding-top: 25px;
+                padding-bottom: 25px;
+            }#showinstructions {
+                background-color: #007dba;
+                border: 19px;
+                color: white;
+                padding: 15px 15px;
+                border-radius: 10px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+            } #showinstructions:hover{
+                background-color: #008CBA;
+                color: white;
+            } #hideinstructions{
+                background-color: #007dba;
+                border: 19px;
+                color: white;
+                padding: 15px 15px;
+                border-radius: 10px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+            } #hideinstructions:hover{
+                background-color: #008CBA;
+                color: white;
+            }h2{
+                text-decoration: underline;
+            }
+
+        </style>
+    </head>
+    <body>
+        <svg id="svg" align ="center" width="800" height="500">
+            <!--The background of the svg -->
+            <image id="picture" x="0" y="-250" width="1000" height="1000"  xlink:href="Earth surface.jpg" />
+            <!-- The object which is bouncing -->
+            <image id="object" x="-100" y="0" width="20" height="20"  xlink:href="red ball.png" />
+        </svg>
+
+        <div id="para">
+            <div>
+                <img src="heading.png" alt="heading" style="width:400px;height:200px;">  
+            </div>
+            <div id="button">
+                <button id="showinstructions">Show Instructions</button>
+            </div>
+        
+            <div id="instr">
+                <button id="hideinstructions">Hide Instructions</button>
+                <p>
+                    <br>Here are some steps to get you started:</br>
+                    <br>Set the mass of your object!</br>
+                    <br>Set your wind speed!</br>
+                    <br>Set your Skin!</br>
+                    <br>Set your planet!</br>
+                    <br>Finally </br>
+                    <br>Click the screen to place your ball! </br>
+                    </p>
+            </div>
+
+           <!--The user is able to choose the mass of his object within  a set range -->
+            <h2> Projectile Mass:  </h2>
+            <h4 id="Amass">5kg</h4> 
+            <input type="range" id="mass" min="5" max="30" step="1" value= "5" oninput = "edit();" />
+             <!--The user is able to choose the direction of the wind and how strong the wind can be within a set range-->
+            <h2>Wind Speed</h2>
+            <h4 id="Awind">1 m/s</h4> 
+            <input type="range" id="wind" min="-10" max="10" step="0.2" value="0.1" oninput= "windS();" />
+
+          <!-- Choose on which surface the ball is bouncing -->
+            <h2>Gravity</h2>
+            <select id="planetgravity"  onchange="grav(value);">
+                <option value="9.8">Earth</option>
+                <option value="1">Moon</option>
+                <option value="3.7">Mars</option>
+                <option value="24.5">Jupiter</option>
+                <option value="8.9">Venus</option>
+            </select>
+
+            
+              <!-- Pick the background color of the whole page-->
+            <h2>Background Color</h2>
+            <select id="colorbg" onchange="chBackcolor(document.getElementById('colorbg').options[document.getElementById('colorbg').selectedIndex].value)">
+                <option value="silver">Grey</option>
+                <option value="aquamarine">Blue</option>
+                <option value="crimson">Red</option>
+                <option value="hotpink">Pink</option>
+                <option value="coral">Orange</option>
+                <option value="lightgreen">Green</option>
+                <option value="lavender">Purple</option>
+                <option value="maroon">Maroon</option>
+                <option value="white">White</option>
+                <option value="sienna">Brown</option>
+            </select>
+
+              <!-- Choose the way the bouncing ball looks -->
+            <h2>Ball Skin</h2>
+            <select id="changeskin" onchange="balllook(value)">
+                <option value="ball">Ball</option>
+                <option value="asteroid">Asteroid</option>
+                <option value="earth">Earth</option>
+                <option value="football">Football</option>
+                <option value="pokeball">Pokeball</option>
+                <option value="mario">Mario</option>
+                <option value="starwars">Millenium Falcon</option>
+            </select>
+            
+
+        </div>
+
+        <script>
+        //Shows button and hides instructions, the below block of code does the opposite
+        document.getElementById('showinstructions').onclick = function() {
+            document.getElementById('instr').style.display = 'block';
+            document.getElementById('button').style.display = 'none';
+
+        };document.getElementById('hideinstructions').onclick = function() {
+            document.getElementById('instr').style.display = 'none';
+            document.getElementById('button').style.display = 'inline-block';
+        };
+        //setting iniitial variables
+		var objectMass=1;
+		var windObj=0.1;
+
+        //change the background color of the page
+        function chBackcolor(color) {
+           document.body.style.background = color;
+        }
+
+        //the function to set the ball look 
+        function balllook(l){
+            if (l=="asteroid"){
+              document.getElementById("object").setAttribute("xlink:href", "asteroid-icon.png");  
+            }
+            //checks the id
+             else if (l=="earth"){
+                //sets the ball to the new image
+              document.getElementById("object").setAttribute("xlink:href", "earth-clipart-yckMB7XcE.png");  
+            }
+             else if (l=="starwars"){
+              document.getElementById("object").setAttribute("xlink:href", "millenium falcon.png");  
+            }
+             else if (l=="ball"){
+              document.getElementById("object").setAttribute("xlink:href", "red ball.png");  
+            }
+            else if (l=="mario"){
+              document.getElementById("object").setAttribute("xlink:href", "mario galaxy.png");  
+            }
+             else if (l=="football"){
+              document.getElementById("object").setAttribute("xlink:href", "football.png");  
+            }
+            else if (l=="pokeball"){
+              document.getElementById("object").setAttribute("xlink:href", "PokeBall.png");  
+            }
+
+        }
+
+            //setting the width and height of the object bouncing
+            var width = 800;
+            var height = 500;
+            
+            var PVector = function(x, y) {
+                //Set x & y co-ordinates for svg 
+                this.x = x;
+                this.y = y;
+
+                //create basic operators minus, plus, divide etc.
+                this.add = function(v) {
+                    this.y = this.y + v.y;
+                    this.x = this.x + v.x;
+                }
+                this.sub = function(v) {
+                    this.x = this.x - v.x;
+                    this.y = this.y - v.y;
+                }
+                this.mult = function(n) {
+                   this.x = this.x * n;
+                   this.y = this.y * n;
+                }
+                
+                this.div = function(n) {
+                   this.x = this.x / n;
+                   this.y = this.y / n;
+                }
+                this.mag = function() {
+                    return Math.sqrt(this.x*this.x + this.y*this.y);
+                };
+                this.normalize = function() {
+                  var m = this.mag();
+                  if (m > 0) {
+                    this.div(m);
+                    }
+                }
+            }     
+
+            //The mover object, creates object.
+            function Mover() {
+
+                //Inistialising variable, to allow re-use of mover object
+                this.values = false;
+                
+                //Retrieveing values for the object
+                this.getV = function(m,x,y){
+                    // Set values to true to allow no further setting of the inital variables 
+                    this.values = true;
+                    //setting mass to the mass being passed into the mover object 
+                    this.mass = m;
+                    //radius of ball
+                    this.ballrad = this.mass*5;
+                    //also setting values of position to values passed into object
+                    this.position = new PVector(x, y);
+                    //accleration and velocity initially set to zero
+                    this.velocity = new PVector(0, 0);
+                    this.acceleration = new PVector(0,0);
+                }
+                
+                //fuction used for the sole purpose to check whether the object has be initially created
+                this.isSet = function(){
+                    return this.values
+                }
+                
+                //This function is the most important! Uses the isaac newtons f = ma formula to
+                //calculate the amount of accleration needed to acclerate the object            
+                this.applyForce = function(theForce){
+                    //sets the force F to the force being passed 
+                    var f = theForce
+                    //letting mass equal the objects mass
+                    var m = this.mass
+                    //doing the calculations for detremining the accleration of the object without actually chaning accleration
+                    var tempA = new PVector(f.x/m,f.y/m);
+                    //Uses add function for Pvectors to add accleration to object
+                    this.acceleration.add(tempA);
+                }
+                
+                //another physics formula to calculate frictional force of the air
+                //in other words AIR resistance
+                this.frictionalForce = function(c,normal){
+                    var v = this.velocity
+                    //getting the actual frictional force
+                    var frict =  c * normal
+                    //reversing velocity of object
+                    var frictForce = new PVector(v.x*-1,v.y*-1)
+                    //normalize the vector force to allow for just plain directional purposes
+                    frictForce.normalize(); 
+                    frictForce.mult(frict);
+                    return frictForce
+                }
+                //updates the velocity and the acceleration
+                this.update = function(){
+                    this.velocity.add(this.acceleration);
+                    this.position.add(this.velocity);
+                    this.acceleration.mult(0);
+                }
+                
+                //displaying the ball
+                this.display = function() {
+                    //changing the position of the ball depending on the 
+                    document.getElementById("object").setAttribute("x", this.position.x);
+                    document.getElementById("object").setAttribute("y", this.position.y);
+                    //setting radius of the object
+                    document.getElementById("object").setAttribute("width", this.ballrad);
+                    document.getElementById("object").setAttribute("height", this.ballrad);
+                };
+                //checks the edges of the screen and changes the position of the ball according to it
+                this.checkEdges = function(){
+                    if (this.position.x >= width - this.ballrad){
+                        //reverse object velocity to simulate the ball bounceing backwards
+                        this.velocity.x *= -1;
+                        //changeing position of the ball to the end of the screen
+                        //this is to not allow for the ball to go past the screen
+                        this.position.x = width - this.ballrad;
+                        //left threshold is set to 3 to allow the ball to touch the left edge
+                    } else if (this.position.x <= 3){
+                        this.velocity.x *= -1;
+                        this.position.x = 3;
+                    } else if (this.position.y <= 1){
+                        this.velocity.y *= -1;
+                        this.position.y = 1;
+                    } else if (this.position.y >= height - this.ballrad){                        
+                        this.position.y = height - this.ballrad;
+                        this.velocity.y *= -1;
+                    } 
+                }
+            };
+            
+            //as name states the MAIN function
+            var Main = function(){
+                //initially creating the ball function that sets a position of the ball, etc.
+                ball = new Mover();
+                
+                //just updates the position of the ball
+                this.update = function(){
+                    if (ball.isSet()){
+                        //sets frictional force
+                        //code below is self explanitory
+                        friction = ball.frictionalForce(2,1);
+                        ball.applyForce(friction)
+                        this.mass = mass;
+                        this.ballrad = mass*5;
+                        ball.applyForce(gravity);
+                        ball.applyForce(wind);
+                        ball.update();
+                        ball.display();
+                        ball.checkEdges();
+                    } 
+                };
+                this.setBall = function(e){
+                    //upon mouse click set position for the object to the mouse
+                    var mouseX = null;
+                    var mouseY = null;
+                    mouseX = e.pageX-10;
+                    mouseY = e.pageY-50;
+            
+                    //allowing for the objectMass varible to be inputted similar to the windObj function below
+                    var ballSiz = objectMass;
+                    var wForce = windObj;
+
+                    //retrieveing the gravity force set by the user
+                    var gForce = parseInt(document.getElementById("planetgravity").value);
+                    //making gravity proportional to object size only making a downward gravity
+                    gravity = new PVector(0, gForce*ballSiz);
+                    //applying the left right wind force
+                    wind = new PVector(wForce,0);
+                    //making sure mouse click is in the svg
+                    if (mouseX<800 && mouseY<490){    
+                        ball.getV(ballSiz, mouseX, mouseY);
+                    }
+                };
+            }
+            //sets the mass of the object to the mass chosen by the user
+            var edit = function() {
+                objectMass = parseInt(document.getElementById("mass").value);
+                document.getElementById("Amass").innerHTML = document.getElementById("mass").value + "kg";
+
+            }
+            //sets the wind to the input by the user
+            var windS = function(){
+                windObj = parseInt(document.getElementById("wind").value);
+                document.getElementById("Awind").innerHTML = document.getElementById("wind").value + "m/s";
+
+            }
+            //checks the gravity of the surface the ball is bouncing on
+            var grav = function(v) {
+                gForce = null;
+                //changes the background image with respect to the gravity of the surface
+                if (v==3.7) {
+                    document.getElementById("picture").setAttribute("xlink:href", "mars surface.jpg");
+                }
+                else if (v==24.5) {
+                    document.getElementById("picture").setAttribute("xlink:href", "jupiter surface.jpg");
+                }
+                else if (v==1) {
+                    document.getElementById("picture").setAttribute("xlink:href", "moonsurface.jpg");
+                }
+                else if (v==9.8) {
+                    document.getElementById("picture").setAttribute("xlink:href", "Earth surface.jpg");
+                }
+                else if (v==8.9) {
+                    document.getElementById("picture").setAttribute("xlink:href", "venus background.jpg");
+                }
+            }
+
+            //actually calls the main function
+            var Main = new Main;
+            //calls this function every 50 milliseconds
+            var interval = window.setInterval( Main.update, 50);
+            //waits untill mouse has been pressed
+            document.addEventListener('mousedown', Main.setBall , false);
+
+        </script>
+        
+    </body>
+</html>
+
