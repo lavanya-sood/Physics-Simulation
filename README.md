@@ -1,2 +1,6 @@
 # Physics-Simulation
-This simulation tests the effect of gravity on objects and was created as a high school project in 2016
+This simulation tests how the bouncing of an object is affected by it's mass and the gravity of the location it is bouncing at.
+
+## Instructions to run:
+  1. Download the repository
+  2. Open **_Simulation.html_** to run the file
